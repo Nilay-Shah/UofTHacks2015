@@ -66,7 +66,7 @@
 	</body>
 
 	<script>
-
+		console.log("HELLO************************");
 		var myo = Myo.create();
 
 		var createGraph = function(elementId, startingData, range, resolution){
@@ -142,14 +142,15 @@
 			}
 		});
 
-		// myo.on('pose', function(pose_name, edge){
-		// 	var outputString = hash_poses[pose_name];
-		// 	if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
-		// 		outputString = 'ice';
-		// 	}
-		// 	previous_pose = pose_name;
-		// 	return outputString;
-		// });
+		myo.on('pose', function(pose_name, edge){
+			var outputString = hash_poses[pose_name];
+			if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
+				outputString = 'ice';
+				console.log("BYE************************");
+			}
+			previous_pose = pose_name;
+			// return outputString;
+		});
 
 		// myo.on('')
 
