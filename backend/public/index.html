@@ -120,6 +120,13 @@
 		var gyroGraph = createGraph('gyroscope', {x:0,y:0,z:0}, 600, 100);
 		var accelerationGraph = createGraph('accelerometer', {x:0,y:0,z:0}, 5, 100);
 		var orientationGraph = createGraph('orientation', {x:0,y:0,z:0,w:0}, 1, 100);
+		var hash_poses = {
+			'rest' : NULL,
+			'fist' : washroom,
+			'waveOut' : hungry,
+			'waveIn' : tired,
+			'fingersSpread' : aid 
+		};
 
 		myo.on('imu', function(data){
 			gyroGraph.addData(data.gyroscope);
@@ -133,6 +140,12 @@
 				.prependTo($('#events'));
 			}
 		});
+
+		myo.on('pose', function(pose_name, edge){
+			hash_poses[pose_name]			
+		});
+
+		myo.on('')
 
 		$('#clear_events').click(function(){
 			$('#events').html('');
