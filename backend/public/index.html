@@ -7,10 +7,10 @@
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
 		<script src='myo.js'></script>
 
-    <script type="text/javascript" src=" https://rawgit.com/cadz7/52840392e9bb649f7369/raw/gistfile1.js">
+    <script type="text/javascript" src="mespeak.js">
      </script>
     <script type="text/javascript">
-      meSpeak.loadConfig("https://rawgit.com/anonymous/4e90fd557f44ee5e1cd1/raw/");
+      meSpeak.loadConfig("mespeak_config.json");
     </script>
 
 		<style>
@@ -68,6 +68,7 @@
 	<script>
 		console.log("HELLO************************");
 		var myo = Myo.create();
+		myo.unlock(180000);
 
 		var createGraph = function(elementId, startingData, range, resolution){
 			var history = _.times(resolution, function(){
@@ -159,7 +160,7 @@
 		})
 	</script>
       <script type="text/javascript">
-        meSpeak.loadVoice('https://rawgit.com/anonymous/dfc4df67cf40138850a8/raw/');
+        meSpeak.loadVoice('en-us.json');
         meSpeak.speak('hello Nilay! How are you?');
       </script>
 
