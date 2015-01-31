@@ -121,11 +121,11 @@
 		var accelerationGraph = createGraph('accelerometer', {x:0,y:0,z:0}, 5, 100);
 		var orientationGraph = createGraph('orientation', {x:0,y:0,z:0,w:0}, 1, 100);
 		var hash_poses = {
-			'rest' : NULL,
-			'fist' : washroom,
-			'waveOut' : hungry,
-			'waveIn' : tired,
-			'fingersSpread' : aid 
+			'rest' : 'null',
+			'fist' : 'washroom',
+			'waveOut' : 'hungry',
+			'waveIn' : 'tired',
+			'fingersSpread' : 'aid' 
 		};
 		var previous_pose = 'rest';
 
@@ -135,23 +135,23 @@
 			accelerationGraph.addData(data.accelerometer);
 		})
 
-		// myo.on('*', function(event, data){
-		// 	if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
-		// 		$('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
-		// 		.prependTo($('#events'));
-		// 	}
-		// });
-
-		myo.on('pose', function(pose_name, edge){
-			var outputString = hash_poses[pose_name];
-			if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
-				outputString = 'ice';
+		myo.on('*', function(event, data){
+			if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
+				$('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
+				.prependTo($('#events'));
 			}
-			previous_pose = pose_name;
-			return outputString;
 		});
 
-		myo.on('')
+		// myo.on('pose', function(pose_name, edge){
+		// 	var outputString = hash_poses[pose_name];
+		// 	if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
+		// 		outputString = 'ice';
+		// 	}
+		// 	previous_pose = pose_name;
+		// 	return outputString;
+		// });
+
+		// myo.on('')
 
 		$('#clear_events').click(function(){
 			$('#events').html('');
