@@ -127,6 +127,7 @@
 			'waveIn' : tired,
 			'fingersSpread' : aid 
 		};
+		var previous_pose = 'rest';
 
 		myo.on('imu', function(data){
 			gyroGraph.addData(data.gyroscope);
@@ -134,15 +135,20 @@
 			accelerationGraph.addData(data.accelerometer);
 		})
 
-		myo.on('*', function(event, data){
-			if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
-				$('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
-				.prependTo($('#events'));
-			}
-		});
+		// myo.on('*', function(event, data){
+		// 	if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
+		// 		$('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
+		// 		.prependTo($('#events'));
+		// 	}
+		// });
 
 		myo.on('pose', function(pose_name, edge){
-			hash_poses[pose_name]			
+			var outputString = hash_poses[pose_name];
+			if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
+				outputString = 'ice';
+			}
+			previous_pose = pose_name;
+			return outputString;
 		});
 
 		myo.on('')
