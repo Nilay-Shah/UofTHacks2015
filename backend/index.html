@@ -120,21 +120,24 @@
 		var gyroGraph = createGraph('gyroscope', {x:0,y:0,z:0}, 600, 100);
 		var accelerationGraph = createGraph('accelerometer', {x:0,y:0,z:0}, 5, 100);
 		var orientationGraph = createGraph('orientation', {x:0,y:0,z:0,w:0}, 1, 100);
-		var hash_poses = {
-			'rest' : 'null',
-			'fist' : 'washroom',
-			'waveOut' : 'hungry',
-			'waveIn' : 'tired',
-			'fingersSpread' : 'aid' 
-		};
-		var previous_pose = 'rest';
+		//Leaving this in case we decide to switch methods
+		// var hash_poses = {
+		// 	'rest' : 'null',
+		// 	'fist' : 'washroom',
+		// 	'waveOut' : 'hungry',
+		// 	'waveIn' : 'tired',
+		// 	'fingersSpread' : 'aid' 
+		// };
+		// var previous_pose = 'rest';
 
+		//Adding the data
 		myo.on('imu', function(data){
 			gyroGraph.addData(data.gyroscope);
 			orientationGraph.addData(data.orientation);
 			accelerationGraph.addData(data.accelerometer);
 		})
 
+		//Output stuff for the graph
 		myo.on('*', function(event, data){
 			if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
 				$('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
@@ -142,6 +145,7 @@
 			}
 		});
 
+		//Leaving this in case we decide to switch methods
 		// myo.on('pose', function(pose_name, edge){
 		// 	var outputString = hash_poses[pose_name];
 		// 	// if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
@@ -153,65 +157,74 @@
 		// 	console.log(pose_name);
 		// });
 
+		//Fist hand motion
 		myo.on('fist', function(edge){
 			var msg = "I need to go to the washroom please!";
 			console.log(msg);
-		  $.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
-		    console.log(result);
-		  }, function(err) {
+			// meSpeak.speak(msg);
+			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+				console.log(result);
+			}, function(err) {
 				console.log(err);
-		  });
+			});
 		});
 
+		//Spread hand motion
 		myo.on('fingers_spread', function(edge){
 			// console.log("YES");
 			var msg = "Help me!";
-			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
-		    console.log(result);
-		    console.log(msg);
-		  }, function(err) {
-		  	console.log(err);
-		  });
+			// meSpeak.speak(msg);
+			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+				console.log(result);
+				console.log(msg);
+			}, function(err) {
+			  	console.log(err);
+			});
 		});
 
+		//Wave in hand motion
 		myo.on('wave_in', function(edge){
 			// console.log("YES2");
 			var msg = "I'm tired and sleepy..";
-			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
-		    console.log(result);
-		  }, function(err) {
-		  	console.log(err);
-		  });
+			// meSpeak.speak(msg);
+			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+			    console.log(result);
+			}, function(err) {
+			  	console.log(err);
+			});
 		});
 
+		//Wave out hand motion
 		myo.on('wave_out', function(edge){
 			// console.log("YES3");
 			var msg = "Feed me!";
-			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
-		    console.log(result);
-		  }, function(err) {
-		  	console.log(err);
-		  });
+			// meSpeak.speak(msg);
+			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+			    console.log(result);
+			}, function(err) {
+				console.log(err);
+			});
 		});
 
+		//Rest hand motion
 		myo.on('rest', function(edge){
 			var msg = "Rest.";
-			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
-		    console.log(result);
-		  });
-		}, function(err) {
-		  	console.log(err);
-		  });
+			// meSpeak.speak(msg);
+			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+			    console.log(result);
+			}, function(err) {
+			  	console.log(err);
+			});
+		});
 
-		// myo.on('')
 
 		$('#clear_events').click(function(){
 			$('#events').html('');
 		})
 	</script>
-      <script type="text/javascript">
+    <script type="text/javascript">
         meSpeak.loadVoice('en-us.json');
-        meSpeak.speak('hello Nilay! How are you?');
-      </script>
+	    meSpeak.speak('hello Nilay! How are you?');
+    </script>
 
 </html>
