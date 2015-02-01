@@ -168,6 +168,7 @@
 			var msg = "Help me!";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
+		    console.log(msg);
 		  }, function(err) {
 		  	console.log(err);
 		  });
