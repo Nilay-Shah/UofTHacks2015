@@ -64,7 +64,6 @@
 			<div id='events'></div>
 		</div>
 	</body>
-
 	<script>
 		console.log("HELLO************************");
 		var myo = Myo.create();
@@ -157,29 +156,36 @@
 		myo.on('fist', function(edge){
 			var msg = "I need to go to the washroom please!";
 			console.log(msg);
-			sendMessage(msg);
+		  $.post("/twilio_endpoint",{message:msg},function(result){
+		    console.log(result);
+		  });
 		});
 
 		myo.on('fingers_spread', function(edge){
 			var msg = "Help me!";
-			console.log(msg);
-			//sendMessage(msg);
+			$.post("/twilio_endpoint",{message:msg},function(result){
+		    console.log(result);
+		  });
 		});
 
 		myo.on('wave_in', function(edge){
 			var msg = "I'm tired and sleepy..";
-			console.log(msg);
-			//sendMessage(msg);
+			$.post("/twilio_endpoint",{message:msg},function(result){
+		    console.log(result);
+		  });
 		});
 
 		myo.on('wave_out', function(edge){
 			var msg = "Feed me!";
-			console.log(msg);
-			//sendMessage(msg);
+			$.post("/twilio_endpoint",{message:msg},function(result){
+		    console.log(result);
+		  });
 		});
 
 		myo.on('rest', function(edge){
-			console.log('rest');
+			$.post("/twilio_endpoint",{message:msg},function(result){
+		    console.log(result);
+		  });
 		});
 
 		// myo.on('')
