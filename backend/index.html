@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>global=window</script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+		<script src='myo.js'></script>
+
+    <script type="text/javascript" src="mespeak.js">
+     </script>
+    <script type="text/javascript">
+      meSpeak.loadConfig("mespeak_config.json");
+    </script>
+
+		<style>
+			body{
+				background-color : #0A0A0A;
+				color : #84FFF1;
+				font-family: 'Open Sans', sans-serif;
+			}
+			.plot{
+				width:430px;
+				height:800px;
+				display : inline-block;
+			}
+
+			#events{
+				border : 1px solid #427F78;
+				font-family: courier;
+				overflow-y : scroll;
+				height : 800px;
+				width: 500px;
+			}
+			.event{
+				margin-bottom: 10px;
+			}
+			.event_data{
+				width: 440px;
+				font-size: 0.8em;
+				margin-left: 20px;
+				opacity: 0.8;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+			}
+
+			#events p{
+				margin-left: 15px;
+				font-size: 1.5em;
+			}
+
+			#events span {
+				font-size: 0.8em;
+			}
+
+		</style>
+	</head>
+	<body>
+		<header>
+			<center>
+				<h1>SignWave Dashboard</h1>
+				<h2>Helping patients communicate better.</h2>
+			</center>
+		</header>
+		<title>IMU Graphs - Myo.js</title>
+		<div style='display:inline-block'>
+			<div></div>
+			<div id='gyroscope' class='plot' ></div>
+		</div>
+		<div style='display:inline-block'>
+			<div></div>
+			<div id='accelerometer' class='plot'></div>
+		</div>
+		<div style='display:inline-block'>
+			<div></div>
+			<div id='orientation' class='plot'></div>
+		</div>
+		<div style='display:inline-block'>
+			<div></div>
+			<div id='events'></div>
+		</div>
+	</body>
+
+    <script type="text/javascript">
+        meSpeak.loadVoice('en-us.json');
+	    // meSpeak.speak('hello Nilay! How are you?');
+
+
+			function addZero(i) {
+			    if (i < 10) {
+			        i = "0" + i;
+			    }
+			    return i;
+			}
+
+			function myFunction() {
+			    var d = new Date();
+			    var elements = document.getElementsByClassName("time");
+			    var length = elements.length;
+			    var x = elements[length - 1];
+			    console.log(x);
+			    var h = addZero(d.getHours());
+			    var m = addZero(d.getMinutes());
+			    var s = addZero(d.getSeconds());
+			    x.innerHTML = h + ":" + m + ":" + s;
+			}
+
+    </script>
+
+	<script>
+		previous_pose = "";
+		console.log("HELLO************************");
+		var myo = Myo.create();
+		myo.unlock(180000);
+
+		var createGraph = function(elementId, startingData, range, resolution){
+			var history = _.times(resolution, function(){
+				return startingData;
+			});
+			var graph = {
+				history : history,
+				getGraphData : function(){
+					var result = {};
+					_.each(this.history, function(data, index){
+						_.each(data, function(val, axis){
+							result[axis] = result[axis] || {label : axis, data : []};
+							result[axis].data.push([val, index])
+						});
+					});
+					return _.values(result);
+				},
+				addData : function(data){
+					this.history.push(data);
+					this.history = this.history.slice(1);
+					this.update();
+				},
+				update : function(){
+					this.plot.setData(this.getGraphData());
+					this.plot.draw()
+				},
+			};
+			graph.plot = $.plot("#" + elementId, graph.getGraphData(), {
+				series: {shadowSize: 0},
+				colors: [ '#84FFF1', '#FFF38A', '#FF4B23', '#00797F'],
+				xaxis: {
+					min : -range,
+					max : range
+				},
+				yaxis : {
+					show: false,
+					min : 0,
+					max : resolution
+				},
+				legend : {
+					backgroundOpacity : 0,
+				},
+				grid : {
+					borderColor : "#427F78"
+				}
+			});
+			return graph;
+		}
+
+		var gyroGraph = createGraph('gyroscope', {x:0,y:0,z:0}, 600, 100);
+		var accelerationGraph = createGraph('accelerometer', {x:0,y:0,z:0}, 5, 100);
+		var orientationGraph = createGraph('orientation', {x:0,y:0,z:0,w:0}, 1, 100);
+		//Leaving this in case we decide to switch methods
+		// var hash_poses = {
+		// 	'rest' : 'null',
+		// 	'fist' : 'washroom',
+		// 	'waveOut' : 'hungry',
+		// 	'waveIn' : 'tired',
+		// 	'fingersSpread' : 'aid' 
+		// };
+		// var previous_pose = 'rest';
+
+		//Adding the data
+		myo.on('imu', function(data){
+			gyroGraph.addData(data.gyroscope);
+			orientationGraph.addData(data.orientation);
+			accelerationGraph.addData(data.accelerometer);
+		})
+
+		//Output stuff for the graph
+		myo.on('*', function(event, data){
+			if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
+				// $('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
+				// .prependTo($('#events'));
+			}
+		});
+
+		//Leaving this in case we decide to switch methods
+		// myo.on('pose', function(pose_name, edge){
+		// 	var outputString = hash_poses[pose_name];
+		// 	// if (previous_pose == 'fingersSpread' && pose_name == 'fingersSpread') {
+		// 	// 	outputString = 'ice';
+		// 	// 	console.log("BYE************************");
+		// 	// }
+		// 	previous_pose = pose_name;
+		// 	// return outputString;
+		// 	console.log(pose_name);
+		// });
+
+		//Fist hand motion
+		myo.on('fist', function(edge){
+			myo.timer(edge, 1500, function(){
+				if(edge != previous_pose)
+				{
+					var patient_message = 'Mr Nelson needs to use the washroom';
+					console.log(patient_message);
+					meSpeak.speak(patient_message);
+
+					$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+					myFunction();
+					previous_pose = edge;
+					$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+					}, function(err) {
+						console.log(err);
+					});
+				}
+			})
+		});
+
+		//Spread hand motion
+		myo.on('fingers_spread', function(edge){
+			myo.timer(edge, 1500, function(){
+				if(edge != previous_pose)
+				{
+					var patient_message = 'Mr. Fisher needs help';
+					meSpeak.speak(patient_message);
+					console.log(patient_message);
+
+					$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+					myFunction();
+					previous_pose = edge;
+					$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+					}, function(err) {
+					  	console.log(err);
+					});
+				}
+			})
+		});
+
+		//Wave in hand motion
+		myo.on('wave_in', function(edge){
+			myo.timer(edge, 1500, function(){
+				if(edge != previous_pose)
+				{
+					var patient_message = 'Mrs Kelley is tired and sleepy';
+					console.log(patient_message);
+					meSpeak.speak(patient_message);
+
+					$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+					// $(msg).prependTo($('#events'));
+					myFunction();
+					previous_pose = edge;
+					$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+					}, function(err) {
+					  	console.log(err);
+					});
+				}
+			})
+		});
+
+		//Wave out hand motion
+		myo.on('wave_out', function(edge){
+			myo.timer(edge, 1500, function(){
+				if(edge != previous_pose)
+				{				
+					var patient_message = 'Mr Stokes is hungry';
+					meSpeak.speak(patient_message);
+					console.log(patient_message);
+
+					$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+					myFunction();
+					previous_pose = edge;
+					$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+					}, function(err) {
+						console.log(err);
+					});
+				}
+			})
+		});
+
+		$('#clear_events').click(function(){
+			$('#events').html('');
+		})
+	</script>
+
+</html>
