@@ -158,6 +158,8 @@
 			console.log(msg);
 		  $.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
+		  }, function(err) {
+				console.log(err);
 		  });
 		});
 
@@ -166,6 +168,8 @@
 			var msg = "Help me!";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
+		  }, function(err) {
+		  	console.log(err);
 		  });
 		});
 
@@ -174,6 +178,8 @@
 			var msg = "I'm tired and sleepy..";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
+		  }, function(err) {
+		  	console.log(err);
 		  });
 		});
 
@@ -182,6 +188,8 @@
 			var msg = "Feed me!";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
+		  }, function(err) {
+		  	console.log(err);
 		  });
 		});
 
@@ -190,7 +198,9 @@
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
 		  });
-		});
+		}, function(err) {
+		  	console.log(err);
+		  });
 
 		// myo.on('')
 
