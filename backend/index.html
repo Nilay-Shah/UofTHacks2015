@@ -164,7 +164,7 @@
 		});
 
 		myo.on('fingers_spread', function(edge){
-			console.log("YES");
+			// console.log("YES");
 			var msg = "Help me!";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
@@ -175,7 +175,7 @@
 		});
 
 		myo.on('wave_in', function(edge){
-			console.log("YES2");
+			// console.log("YES2");
 			var msg = "I'm tired and sleepy..";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
@@ -185,7 +185,7 @@
 		});
 
 		myo.on('wave_out', function(edge){
-			console.log("YES3");
+			// console.log("YES3");
 			var msg = "Feed me!";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
@@ -195,7 +195,7 @@
 		});
 
 		myo.on('rest', function(edge){
-			var msg = "Rest, bitch.";
+			var msg = "Rest.";
 			$.post("http://localhost:3000/twilio_endpoint",{message:msg},function(result){
 		    console.log(result);
 		  });
