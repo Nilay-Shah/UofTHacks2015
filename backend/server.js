@@ -19,7 +19,7 @@ app.post('/twilio_endpoint', function(req, res) {
 	console.log(req.body.message);
 	var msg = req.body.message;
 
-	if(msg.toString() != "Help me!"){
+	if(msg.toString() != "Mr. Fisher needs help"){
 		//Send an SMS text message
 		client.sendMessage({
 
@@ -45,6 +45,7 @@ app.post('/twilio_endpoint', function(req, res) {
 		client.makeCall({
 
 		    to:'+16478085434', // Any number Twilio can call
+		    // from : '',
 		    from: '+16476910630', // A number you bought from Twilio and can use for outbound communication
 		    url: 'http://rickshukla.me/hello.xml' // A URL that produces an XML document (TwiML) which contains instructions for the call
 

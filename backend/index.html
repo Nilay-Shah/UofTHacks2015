@@ -20,7 +20,7 @@
 				font-family: 'Open Sans', sans-serif;
 			}
 			.plot{
-				width:300px;
+				width:430px;
 				height:800px;
 				display : inline-block;
 			}
@@ -43,9 +43,25 @@
 				white-space: pre-wrap;
 				word-wrap: break-word;
 			}
+
+			#events p{
+				margin-left: 15px;
+				font-size: 1.5em;
+			}
+
+			#events span {
+				font-size: 0.8em;
+			}
+
 		</style>
 	</head>
 	<body>
+		<header>
+			<center>
+				<h1>SignWave Dashboard</h1>
+				<h2>Helping patients communicate better.</h2>
+			</center>
+		</header>
 		<title>IMU Graphs - Myo.js</title>
 		<div style='display:inline-block'>
 			<div></div>
@@ -68,6 +84,27 @@
     <script type="text/javascript">
         meSpeak.loadVoice('en-us.json');
 	    // meSpeak.speak('hello Nilay! How are you?');
+
+
+			function addZero(i) {
+			    if (i < 10) {
+			        i = "0" + i;
+			    }
+			    return i;
+			}
+
+			function myFunction() {
+			    var d = new Date();
+			    var elements = document.getElementsByClassName("time");
+			    var length = elements.length;
+			    var x = elements[length - 1];
+			    console.log(x);
+			    var h = addZero(d.getHours());
+			    var m = addZero(d.getMinutes());
+			    var s = addZero(d.getSeconds());
+			    x.innerHTML = h + ":" + m + ":" + s;
+			}
+
     </script>
 
 	<script>
@@ -146,8 +183,8 @@
 		//Output stuff for the graph
 		myo.on('*', function(event, data){
 			if(!_.contains(['imu', 'orientation', 'accelerometer', 'gyroscope', 'position', 'pose', 'rest'], event)){
-				$('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
-				.prependTo($('#events'));
+				// $('<div class="event">' + event + '<div class="event_data">' + JSON.stringify(data) + '</div></div>')
+				// .prependTo($('#events'));
 			}
 		});
 
@@ -165,11 +202,14 @@
 
 		//Fist hand motion
 		myo.on('fist', function(edge){
-			var msg = "I need to go to the washroom please!";
-			var patient_message = 'The patient needs to use the washroom.';
+
+			var patient_message = 'Mr Nelson needs to use the washroom';
 			console.log(patient_message);
 			meSpeak.speak(patient_message);
-			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+
+			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+			myFunction();
+			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
 			}, function(err) {
 				console.log(err);
 			});
@@ -177,12 +217,13 @@
 
 		//Spread hand motion
 		myo.on('fingers_spread', function(edge){
-			// console.log("YES");
-			var msg = "Help me!";
-			var patient_message = 'The patient is needs help';
+			var patient_message = 'Mr. Fisher needs help';
 			meSpeak.speak(patient_message);
 			console.log(patient_message);
-			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+
+			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+			myFunction();
+			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
 			}, function(err) {
 			  	console.log(err);
 			});
@@ -190,11 +231,14 @@
 
 		//Wave in hand motion
 		myo.on('wave_in', function(edge){
-			var msg = "I am tired and sleepy!";
-			var patient_message = 'The patient is tired and sleepy';
+			var patient_message = 'Mrs Kelley is tired and sleepy';
 			console.log(patient_message);
 			meSpeak.speak(patient_message);
-			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+
+			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+			// $(msg).prependTo($('#events'));
+			myFunction();
+			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
 			}, function(err) {
 			  	console.log(err);
 			});
@@ -202,25 +246,17 @@
 
 		//Wave out hand motion
 		myo.on('wave_out', function(edge){
-			var msg = "Feed me!";
-			var patient_message = 'The patient is hungry';
+			var patient_message = 'Mr Stokes is hungry';
 			meSpeak.speak(patient_message);
 			console.log(patient_message);
-			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
+
+			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+			myFunction();
+			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
 			}, function(err) {
 				console.log(err);
 			});
 		});
-
-		//Rest hand motion
-		myo.on('rest', function(edge){
-			var msg = "Rest.";
-			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
-			}, function(err) {
-			  	console.log(err);
-			});
-		});
-
 
 		$('#clear_events').click(function(){
 			$('#events').html('');
