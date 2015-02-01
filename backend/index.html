@@ -202,60 +202,68 @@
 
 		//Fist hand motion
 		myo.on('fist', function(edge){
+			myo.timer(edge, 1500, function(){
 
-			var patient_message = 'Mr Nelson needs to use the washroom';
-			console.log(patient_message);
-			meSpeak.speak(patient_message);
+				var patient_message = 'Mr Nelson needs to use the washroom';
+				console.log(patient_message);
+				meSpeak.speak(patient_message);
 
-			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
-			myFunction();
-			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
-			}, function(err) {
-				console.log(err);
-			});
+				$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+				myFunction();
+				$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+				}, function(err) {
+					console.log(err);
+				});
+			})
 		});
 
 		//Spread hand motion
 		myo.on('fingers_spread', function(edge){
-			var patient_message = 'Mr. Fisher needs help';
-			meSpeak.speak(patient_message);
-			console.log(patient_message);
+			myo.timer(edge, 1500, function(){
+				var patient_message = 'Mr. Fisher needs help';
+				meSpeak.speak(patient_message);
+				console.log(patient_message);
 
-			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
-			myFunction();
-			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
-			}, function(err) {
-			  	console.log(err);
-			});
+				$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+				myFunction();
+				$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+				}, function(err) {
+				  	console.log(err);
+				});
+			})
 		});
 
 		//Wave in hand motion
 		myo.on('wave_in', function(edge){
-			var patient_message = 'Mrs Kelley is tired and sleepy';
-			console.log(patient_message);
-			meSpeak.speak(patient_message);
+			myo.timer(edge, 1500, function(){
+				var patient_message = 'Mrs Kelley is tired and sleepy';
+				console.log(patient_message);
+				meSpeak.speak(patient_message);
 
-			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
-			// $(msg).prependTo($('#events'));
-			myFunction();
-			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
-			}, function(err) {
-			  	console.log(err);
-			});
+				$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+				// $(msg).prependTo($('#events'));
+				myFunction();
+				$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+				}, function(err) {
+				  	console.log(err);
+				});
+			})
 		});
 
 		//Wave out hand motion
 		myo.on('wave_out', function(edge){
-			var patient_message = 'Mr Stokes is hungry';
-			meSpeak.speak(patient_message);
-			console.log(patient_message);
+			myo.timer(edge, 1500, function(){
+				var patient_message = 'Mr Stokes is hungry';
+				meSpeak.speak(patient_message);
+				console.log(patient_message);
 
-			$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
-			myFunction();
-			$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
-			}, function(err) {
-				console.log(err);
-			});
+				$('#events').append('<p>' + patient_message + '. (' + '<span class="time"></span>' + ')' +'</p>');
+				myFunction();
+				$.post("http://localhost:3000/twilio_endpoint", {message:patient_message}, function(result){
+				}, function(err) {
+					console.log(err);
+				});
+			})
 		});
 
 		$('#clear_events').click(function(){
