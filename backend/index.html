@@ -48,22 +48,28 @@
 	<body>
 		<title>IMU Graphs - Myo.js</title>
 		<div style='display:inline-block'>
-			<div>Gyroscope</div>
+			<div></div>
 			<div id='gyroscope' class='plot' ></div>
 		</div>
 		<div style='display:inline-block'>
-			<div>Accelerometer</div>
+			<div></div>
 			<div id='accelerometer' class='plot'></div>
 		</div>
 		<div style='display:inline-block'>
-			<div>Orientation</div>
+			<div></div>
 			<div id='orientation' class='plot'></div>
 		</div>
 		<div style='display:inline-block'>
-			<div> Events <button id='clear_events'>clear</button></div>
+			<div></div>
 			<div id='events'></div>
 		</div>
 	</body>
+
+    <script type="text/javascript">
+        meSpeak.loadVoice('en-us.json');
+	    // meSpeak.speak('hello Nilay! How are you?');
+    </script>
+
 	<script>
 		console.log("HELLO************************");
 		var myo = Myo.create();
@@ -160,10 +166,10 @@
 		//Fist hand motion
 		myo.on('fist', function(edge){
 			var msg = "I need to go to the washroom please!";
-			console.log(msg);
-			// meSpeak.speak(msg);
+			var patient_message = 'The patient needs to use the washroom.';
+			console.log(patient_message);
+			meSpeak.speak(patient_message);
 			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
-				console.log(result);
 			}, function(err) {
 				console.log(err);
 			});
@@ -173,10 +179,10 @@
 		myo.on('fingers_spread', function(edge){
 			// console.log("YES");
 			var msg = "Help me!";
-			// meSpeak.speak(msg);
+			var patient_message = 'The patient is needs help';
+			meSpeak.speak(patient_message);
+			console.log(patient_message);
 			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
-				console.log(result);
-				console.log(msg);
 			}, function(err) {
 			  	console.log(err);
 			});
@@ -184,11 +190,11 @@
 
 		//Wave in hand motion
 		myo.on('wave_in', function(edge){
-			// console.log("YES2");
-			var msg = "I'm tired and sleepy..";
-			// meSpeak.speak(msg);
+			var msg = "I am tired and sleepy!";
+			var patient_message = 'The patient is tired and sleepy';
+			console.log(patient_message);
+			meSpeak.speak(patient_message);
 			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
-			    console.log(result);
 			}, function(err) {
 			  	console.log(err);
 			});
@@ -196,11 +202,11 @@
 
 		//Wave out hand motion
 		myo.on('wave_out', function(edge){
-			// console.log("YES3");
 			var msg = "Feed me!";
-			// meSpeak.speak(msg);
+			var patient_message = 'The patient is hungry';
+			meSpeak.speak(patient_message);
+			console.log(patient_message);
 			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
-			    console.log(result);
 			}, function(err) {
 				console.log(err);
 			});
@@ -209,9 +215,7 @@
 		//Rest hand motion
 		myo.on('rest', function(edge){
 			var msg = "Rest.";
-			// meSpeak.speak(msg);
 			$.post("http://localhost:3000/twilio_endpoint", {message:msg}, function(result){
-			    console.log(result);
 			}, function(err) {
 			  	console.log(err);
 			});
@@ -222,9 +226,5 @@
 			$('#events').html('');
 		})
 	</script>
-    <script type="text/javascript">
-        meSpeak.loadVoice('en-us.json');
-	    meSpeak.speak('hello Nilay! How are you?');
-    </script>
 
 </html>

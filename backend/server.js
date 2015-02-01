@@ -46,7 +46,7 @@ app.post('/twilio_endpoint', function(req, res) {
 
 		    to:'+16478085434', // Any number Twilio can call
 		    from: '+16476910630', // A number you bought from Twilio and can use for outbound communication
-		    url: 'http://localhost:3000/hello.xml' // A URL that produces an XML document (TwiML) which contains instructions for the call
+		    url: 'http://rickshukla.me/hello.xml' // A URL that produces an XML document (TwiML) which contains instructions for the call
 
 		}, function(err, responseData) {
 
