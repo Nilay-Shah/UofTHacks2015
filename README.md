@@ -7,4 +7,4 @@ Logo made from [Hipster Logo Generator](http://www.hipsterlogogenerator.com) and
 
 
 
-[YOUTUBE DEMO](https://www.youtube.com/watch?v=0_ze-sBpMM0&feature=youtube_gdata_player) (Only one gesture)
+[YOUTUBE DEMO](http://youtu.be/CjRfDDT0KQk) (Only one gesture)
